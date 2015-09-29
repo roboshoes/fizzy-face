@@ -64,7 +64,7 @@ public class FizzyFace extends CanvasWatchFaceService {
         BubbleController bubbleController;
         Time time;
 
-        boolean isRegisteredTimeZoneReciever = false;
+        boolean isRegisteredTimeZoneReceiver = false;
         boolean isAmbient;
         boolean isLowBitAmbient;
         boolean isRound;
@@ -123,17 +123,17 @@ public class FizzyFace extends CanvasWatchFaceService {
         }
 
         private void registerReceiver() {
-            if ( isRegisteredTimeZoneReciever ) return;
+            if ( isRegisteredTimeZoneReceiver ) return;
 
-            isRegisteredTimeZoneReciever = true;
+            isRegisteredTimeZoneReceiver = true;
             IntentFilter filter = new IntentFilter( Intent.ACTION_TIMEZONE_CHANGED );
             FizzyFace.this.registerReceiver( timeZoneReceiver, filter );
         }
 
         private void unregisterReceiver() {
-            if ( !isRegisteredTimeZoneReciever ) return;
+            if ( !isRegisteredTimeZoneReceiver ) return;
 
-            isRegisteredTimeZoneReciever = false;
+            isRegisteredTimeZoneReceiver = false;
             FizzyFace.this.unregisterReceiver( timeZoneReceiver );
         }
 
@@ -178,7 +178,7 @@ public class FizzyFace extends CanvasWatchFaceService {
 
             String timeString = String.format( "%02d%02d", hours, minutes );
 
-            bubbleController.setNumber( timeString );
+            bubbleController.setNumber( "izzy" );
             bubbleController.draw( canvas, bounds, isAmbient, isRound );
         }
 

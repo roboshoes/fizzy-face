@@ -15,7 +15,7 @@ public class Bezier {
         update();
     }
 
-    public void setTime( float time) {
+    public void setTime( float time ) {
         mPercent = time;
         update();
     }

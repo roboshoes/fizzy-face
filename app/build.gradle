@@ -19,9 +19,7 @@ allprojects {
 
 android {
     signingConfigs {
-        config {
-
-        }
+        config {}
     }
 
     compileSdkVersion 22
