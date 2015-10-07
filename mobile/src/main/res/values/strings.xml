@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Fizzy Face</string>
+    <string name="title_activity_main">Companion App</string>
+    <string name="generate_background">Generate Background Color</string>
+    <string name="generate_foreground">Generate Foreground Color</string>
 </resources>

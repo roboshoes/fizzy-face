@@ -24,6 +24,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,8 +34,19 @@ import android.text.format.Time;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.data.FreezableUtils;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.Wearable;
+
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -49,7 +61,11 @@ public class FizzyFace extends CanvasWatchFaceService {
         return new Engine();
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine {
+    private class Engine extends CanvasWatchFaceService.Engine implements
+            DataApi.DataListener,
+            GoogleApiClient.ConnectionCallbacks,
+            GoogleApiClient.OnConnectionFailedListener  {
+
         final Handler updateTimeHandler = new EngineHandler( this );
         final BroadcastReceiver timeZoneReceiver = new BroadcastReceiver() {
             @Override
@@ -59,15 +75,24 @@ public class FizzyFace extends CanvasWatchFaceService {
             }
         };
 
-        Paint backgroundPaint;
-        Paint bubblePaint;
-        BubbleController bubbleController;
-        Time time;
+        private static final String BACKGROUND = "com.roboshoes.color.background";
+        private static final String FOREGROUND = "com.roboshoes.color.foreground";
 
-        boolean isRegisteredTimeZoneReceiver = false;
-        boolean isAmbient;
-        boolean isLowBitAmbient;
-        boolean isRound;
+        private Paint backgroundPaint;
+        private Paint bubblePaint;
+        private BubbleController bubbleController;
+        private Time time;
+
+        private GoogleApiClient googleApiClient = new GoogleApiClient.Builder( FizzyFace.this )
+                .addConnectionCallbacks( this )
+                .addOnConnectionFailedListener( this )
+                .addApiIfAvailable( Wearable.API )
+                .build();;
+
+        private boolean isRegisteredTimeZoneReceiver = false;
+        private boolean isAmbient;
+        private boolean isLowBitAmbient;
+        private boolean isRound;
 
         @Override
         public void onCreate( SurfaceHolder holder ) {
@@ -94,6 +119,38 @@ public class FizzyFace extends CanvasWatchFaceService {
         }
 
         @Override
+        public void onDataChanged( DataEventBuffer dataEventBuffer ) {
+
+            final List<DataEvent> events = FreezableUtils.freezeIterable( dataEventBuffer );
+            for ( DataEvent event : events ) {
+
+                final Uri uri = event.getDataItem().getUri();
+                final String path = uri != null ? uri.getPath() : null;
+
+                if ( "/COLORS".equals( path ) ) {
+                    final DataMap map = DataMapItem.fromDataItem( event.getDataItem() ).getDataMap();
+
+                    if ( map.containsKey( BACKGROUND ) )
+                        backgroundPaint.setColor( map.getInt( BACKGROUND ) );
+
+                    if ( map.containsKey( FOREGROUND ) )
+                        bubblePaint.setColor( map.getInt( FOREGROUND ) );
+                }
+            }
+        }
+
+        @Override
+        public void onConnected( Bundle bundle ) {
+            Wearable.DataApi.addListener( googleApiClient, Engine.this );
+        }
+
+        @Override
+        public void onConnectionSuspended( int cause ) {}
+
+        @Override
+        public void onConnectionFailed( ConnectionResult connectionResult ) {}
+
+        @Override
         public void onDestroy() {
             updateTimeHandler.removeMessages( MSG_UPDATE_TIME );
             super.onDestroy();
@@ -115,8 +172,11 @@ public class FizzyFace extends CanvasWatchFaceService {
 
                 time.clear( TimeZone.getDefault().getID() );
                 time.setToNow();
+
+                googleApiClient.connect();
             } else {
                 unregisterReceiver();
+                googleApiClient.disconnect();
             }
 
             updateTimer();
