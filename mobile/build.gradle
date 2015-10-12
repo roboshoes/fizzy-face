@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId "com.roboshoes.fizzy"
-        minSdkVersion 21
-        targetSdkVersion 21
+        minSdkVersion 22
+        targetSdkVersion 22
         versionCode 3
         versionName "1.2"
     }
@@ -29,4 +29,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     wearApp project(':wear')
     compile 'com.google.android.gms:play-services:+'
+    compile 'com.android.support:appcompat-v7:22.0.+'
+    compile 'com.android.support:cardview-v7:22.0.+'
+    compile 'com.android.support:recyclerview-v7:22.0.+'
+    compile 'com.android.support:support-v4:22.0.0'
 }

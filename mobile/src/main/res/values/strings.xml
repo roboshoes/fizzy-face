@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Fizzy Face</string>
-    <string name="title_activity_main">Companion App</string>
-    <string name="generate_background">Generate Background Color</string>
-    <string name="generate_foreground">Generate Foreground Color</string>
+    <string name="title_activity_main">Fizzy Face Settings</string>
+
+    <string name="bubble_color_title">Bubble Color</string>
+    <string name="bubble_color_subtitle">Choose a color for the bubbles</string>
+
+    <string name="background_color_title">Background Color</string>
+    <string name="background_color_subtitle">Choose a color for the background</string>
+
+    <string name="font_title">Font Face</string>
+    <string name="font_subtitle">Choose a font type</string>
+
+    <string name="block_font">Block</string>
+    <string name="round_fond">Round</string>
 </resources>
