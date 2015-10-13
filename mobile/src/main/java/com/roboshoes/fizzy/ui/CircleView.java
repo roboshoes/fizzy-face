@@ -6,30 +6,43 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.roboshoes.fizzy.R;
-import com.roboshoes.fizzy.utils.ColorUtils;
 
 /**
  * Created by roboshoes on 10/12/15.
  */
 public class CircleView extends ImageView {
-    public CircleView( Context context ) {
+
+    private int color;
+    private String target;
+
+    public CircleView( Context context, int color, String target ) {
         super( context );
 
-        int margin = (int) ( context.getResources().getDisplayMetrics().density * 20 );
+        this.color = color;
+        this.target = target;
+
+        int margin = (int) ( context.getResources().getDisplayMetrics().density * 10 );
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
 
-        params.setMargins( margin, margin, margin, margin );
+        params.setMargins( 0, 0, margin, 0 );
 
         GradientDrawable shape = (GradientDrawable) context.getDrawable( R.drawable.circle );
-        shape.setColor( ColorUtils.createRandomColor() );
+        shape.setColor( color );
 
         this.setBackground( shape );
         this.setLayoutParams( params );
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public String getTarget() {
+        return target;
+    }
 
 }

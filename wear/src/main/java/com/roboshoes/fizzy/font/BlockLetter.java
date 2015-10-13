@@ -1,12 +1,9 @@
-package com.roboshoes.fizzy;
+package com.roboshoes.fizzy.font;
 
 
-public class Letter {
+public class BlockLetter implements ILetter {
 
-    public static final int COLS = 10;
-    public static final int ROWS = 14;
-
-    public static int[] getBitmap( char character ) {
+    public  int[] getBitmap( char character ) {
         switch ( character ) {
             case '0' : return zero;
             case '1' : return one;

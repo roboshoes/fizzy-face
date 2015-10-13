@@ -1,0 +1,19 @@
+@import "libs/normalize";
+
+body, html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+canvas, textarea {
+    display: block;
+}
+
+textarea {
+    margin-top: 40px;
+    width: 500px;
+    height: 500px;
+    font-family: "courier new", consolas, monospace;
+}

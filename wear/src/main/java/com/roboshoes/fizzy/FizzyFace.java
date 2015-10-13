@@ -77,6 +77,7 @@ public class FizzyFace extends CanvasWatchFaceService {
 
         private static final String BACKGROUND = "com.roboshoes.color.background";
         private static final String FOREGROUND = "com.roboshoes.color.foreground";
+        private static final String FONT = "com.roboshoes.font.type";
 
         private Paint backgroundPaint;
         private Paint bubblePaint;
@@ -135,6 +136,9 @@ public class FizzyFace extends CanvasWatchFaceService {
 
                     if ( map.containsKey( FOREGROUND ) )
                         bubblePaint.setColor( map.getInt( FOREGROUND ) );
+
+                    if ( map.containsKey( FONT ) )
+                        bubbleController.setFont( map.getInt( FONT ) );
                 }
             }
         }

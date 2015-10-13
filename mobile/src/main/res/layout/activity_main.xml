@@ -35,8 +35,7 @@
                 android:paddingTop="16dp"
                 android:textColor="@color/primary_dark_material_dark"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                />
+                android:paddingRight="16dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -46,10 +45,10 @@
                 android:paddingTop="2dp"
                 android:textColor="@color/primary_dark_material_light"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                />
+                android:paddingRight="16dp"/>
 
             <LinearLayout
+                android:id="@+id/bubble_color_holder"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -58,32 +57,7 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="@color/material_blue_grey_800"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="@color/accent_material_light"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="@color/material_deep_teal_200"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:layout_marginRight="10dp"/>
+                <!-- Colors are injected via CompanionConfigActivity::fillContainer() -->
 
             </LinearLayout>
 
@@ -113,8 +87,7 @@
                 android:paddingTop="16dp"
                 android:textColor="@color/primary_dark_material_dark"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                />
+                android:paddingRight="16dp"/>
 
             <TextView
                 android:id="@+id/subtitle"
@@ -125,10 +98,10 @@
                 android:paddingTop="2dp"
                 android:textColor="@color/primary_dark_material_light"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                />
+                android:paddingRight="16dp"/>
 
             <LinearLayout
+                android:id="@+id/background_color_holder"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -137,32 +110,7 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="@color/material_blue_grey_800"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="@color/accent_material_light"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:backgroundTint="@color/material_deep_teal_200"
-                    android:layout_marginRight="10dp"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/circle"
-                    android:layout_marginRight="10dp"/>
+                <!-- Colors are injected via CompanionConfigActivity::fillContainer() -->
 
             </LinearLayout>
 
@@ -191,8 +139,7 @@
                 android:paddingTop="16dp"
                 android:textColor="@color/primary_dark_material_dark"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                />
+                android:paddingRight="16dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -202,8 +149,7 @@
                 android:paddingTop="2dp"
                 android:textColor="@color/primary_dark_material_light"
                 android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                />
+                android:paddingRight="16dp"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -215,11 +161,13 @@
                 android:paddingBottom="16dp">
 
                 <Button
+                    android:id="@+id/block_font_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/block_font"/>
 
                 <Button
+                    android:id="@+id/round_font_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/round_fond"/>

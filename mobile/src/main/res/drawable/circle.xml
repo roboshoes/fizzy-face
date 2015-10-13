@@ -6,9 +6,6 @@
     <solid
         android:color="#ff0000"/>
 
-    <stroke android:color="#ff3333"
-            android:width="3dp" />
-
     <size
         android:width="30dp"
         android:height="30dp"/>

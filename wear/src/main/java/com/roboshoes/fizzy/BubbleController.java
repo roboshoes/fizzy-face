@@ -4,11 +4,14 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import com.roboshoes.fizzy.font.BlockLetter;
+import com.roboshoes.fizzy.font.LetterFactory;
+
 import java.util.ArrayList;
 
 public class BubbleController {
 
-    private static final int GRID_SIZE = Letter.zero.length;
+    private static final int GRID_SIZE = BlockLetter.zero.length;
     private static final int BUBBLE_COUNT = 400;
 
     private Paint foregroundPaint;
@@ -17,7 +20,9 @@ public class BubbleController {
     private String latestTime;
     private int bubblesPerField = 1;
     private int totalFields = 0;
+    private int latestFont = -1;
     private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
+    private int font = LetterFactory.BLOCK_FONT;
 
     public BubbleController( Paint backgroundPaint, Paint foregroundPaint ) {
         this.backgroundPaint = backgroundPaint;
@@ -37,11 +42,11 @@ public class BubbleController {
             for ( int i = 0; i < GRID_SIZE; i++ ) {
                 if ( numbers[ j ][ i ] == 1 ) {
 
-                    int row = (int) Math.floor( (float) i / Letter.COLS );
-                    int col = i % Letter.COLS;
+                    int row = (int) Math.floor( (float) i / LetterFactory.COLS );
+                    int col = i % LetterFactory.COLS;
 
-                    float colPercent = ( j % 2 == 0 ? 0.0f : 0.55f ) + ( col / ( Letter.COLS - 1.0f ) )  * 0.45f;
-                    float rowPercent = ( j < 2 ? 0.0f : 0.55f ) + ( row / ( Letter.ROWS - 1.0f ) ) * 0.45f;
+                    float colPercent = ( j % 2 == 0 ? 0.0f : 0.55f ) + ( col / ( LetterFactory.COLS - 1.0f ) )  * 0.45f;
+                    float rowPercent = ( j < 2 ? 0.0f : 0.55f ) + ( row / ( LetterFactory.ROWS - 1.0f ) ) * 0.45f;
 
                     possibleFields.add( new float[] { colPercent, rowPercent } );
 
@@ -89,13 +94,14 @@ public class BubbleController {
     }
 
     public void setNumber( String time ) {
-        if ( time.equals( latestTime ) ) return;
+        if ( time.equals( latestTime ) && latestFont == font ) return;
 
         latestTime = time;
+        latestFont = font;
         totalFields = 0;
 
         for ( int j = 0; j < 4; j++ ) {
-            numbers[ j ] = Letter.getBitmap( time.charAt( j ) );
+            numbers[ j ] = LetterFactory.getBitmap( font, time.charAt( j ) );
 
             for ( int i = 0; i < GRID_SIZE; i++ ) {
                 if ( numbers[ j ][ i ] == 1 ) totalFields++;
@@ -105,5 +111,9 @@ public class BubbleController {
         bubblesPerField = (int) Math.floor( BUBBLE_COUNT / totalFields );
 
         updatePosition();
+    }
+
+    public void setFont( int font ) {
+        this.font = font;
     }
 }

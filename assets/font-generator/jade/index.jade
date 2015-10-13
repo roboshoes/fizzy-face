@@ -1,0 +1,25 @@
+block variables
+    - var title = "Title";
+    - var description = "Description";
+    - var author = "Mathias Paumgarten"
+
+doctype html
+html
+    head
+        title= title
+
+        meta( charset="UTF-8" )
+
+        meta( name="author", content=author )
+        meta( name="description", content=description )
+        meta( name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" )
+
+        link( href="stylesheets/main.css", rel="stylesheet" )
+
+    body
+
+        canvas#canvas
+
+        textarea#textarea
+
+        script( src="javascripts/main.js" )
