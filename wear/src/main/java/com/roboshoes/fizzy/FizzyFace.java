@@ -88,7 +88,7 @@ public class FizzyFace extends CanvasWatchFaceService {
                 .addConnectionCallbacks( this )
                 .addOnConnectionFailedListener( this )
                 .addApiIfAvailable( Wearable.API )
-                .build();;
+                .build();
 
         private boolean isRegisteredTimeZoneReceiver = false;
         private boolean isAmbient;

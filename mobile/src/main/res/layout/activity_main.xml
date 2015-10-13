@@ -158,19 +158,22 @@
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp"
                 android:paddingTop="16dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="16dp"
+                android:clipToPadding="false">
 
                 <Button
                     android:id="@+id/block_font_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/block_font"/>
+                    android:text="@string/block_font"
+                    android:clipToPadding="false"/>
 
                 <Button
                     android:id="@+id/round_font_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/round_fond"/>
+                    android:text="@string/round_fond"
+                    android:clipToPadding="false"/>
             </LinearLayout>
 
         </LinearLayout>

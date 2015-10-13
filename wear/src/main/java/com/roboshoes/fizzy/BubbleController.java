@@ -3,6 +3,7 @@ package com.roboshoes.fizzy;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.roboshoes.fizzy.font.BlockLetter;
 import com.roboshoes.fizzy.font.LetterFactory;
@@ -19,10 +20,9 @@ public class BubbleController {
     private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
     private String latestTime;
     private int bubblesPerField = 1;
-    private int totalFields = 0;
     private int latestFont = -1;
     private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
-    private int font = LetterFactory.BLOCK_FONT;
+    private int font = LetterFactory.ROUND_FONT;
 
     public BubbleController( Paint backgroundPaint, Paint foregroundPaint ) {
         this.backgroundPaint = backgroundPaint;
@@ -98,7 +98,8 @@ public class BubbleController {
 
         latestTime = time;
         latestFont = font;
-        totalFields = 0;
+
+        int totalFields = 0;
 
         for ( int j = 0; j < 4; j++ ) {
             numbers[ j ] = LetterFactory.getBitmap( font, time.charAt( j ) );
@@ -113,7 +114,7 @@ public class BubbleController {
         updatePosition();
     }
 
-    public void setFont( int font ) {
-        this.font = font;
+    public void setFont( int value ) {
+        this.font = value;
     }
 }

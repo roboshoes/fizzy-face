@@ -16,10 +16,10 @@ function next() {
     clear();
 
     context.fillStyle = "red";
-    context.font = "13px Arial";
+    context.font = "16px Arial";
     context.textAlign = "center";
     context.textBaseline = "top";
-    context.fillText( count.toString(), 5, 0 );
+    context.fillText( count.toString(), 5, -1 );
 
     var data = context.getImageData( 0, 0, 10, 14 ).data;
     var string = "";
