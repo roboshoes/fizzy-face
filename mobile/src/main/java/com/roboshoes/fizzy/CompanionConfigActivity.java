@@ -2,7 +2,6 @@ package com.roboshoes.fizzy;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -13,6 +12,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.roboshoes.fizzy.ui.CircleView;
+import com.roboshoes.fizzy.ui.Colors;
 
 public class CompanionConfigActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -58,10 +58,10 @@ public class CompanionConfigActivity extends Activity implements
     }
 
     private void fillContainer( LinearLayout container, String target ) {
-        int[] colors = { 0xff37474f, 0xff009688, 0xff80cbc4, 0xffff0000 };
+        int[] colors = target == BACKGROUND ? Colors.BACKGROUND : Colors.FOREGROUND;
 
-        for ( int i = 0; i < 4; i++ ) {
-            CircleView circle = new CircleView( this, colors[ i ], target );
+        for ( int i = 0; i < colors.length; i++ ) {
+            CircleView circle = new CircleView( this, colors[ i ], target, i == colors.length - 1 );
 
             circle.setOnClickListener( new View.OnClickListener() {
                 @Override

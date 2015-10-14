@@ -1,183 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="@color/background_material_light"
     android:clipToPadding="false"
 
     tools:context="com.roboshoes.fizzy.CompanionConfigActivity">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_gravity="center"
+    <LinearLayout
+        android:padding="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp">
+        android:clipToPadding="false"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/bubble_color_title"
-                android:textSize="24sp"
-                android:paddingTop="16dp"
-                android:textColor="@color/primary_dark_material_dark"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/bubble_color_subtitle"
-                android:textSize="14sp"
-                android:paddingTop="2dp"
-                android:textColor="@color/primary_dark_material_light"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="4dp">
 
             <LinearLayout
-                android:id="@+id/bubble_color_holder"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp">
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-                <!-- Colors are injected via CompanionConfigActivity::fillContainer() -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/bubble_color_title"
+                    android:textSize="24sp"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/primary_dark_material_dark"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/bubble_color_subtitle"
+                    android:textSize="14sp"
+                    android:paddingTop="2dp"
+                    android:textColor="@color/primary_dark_material_light"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/bubble_color_holder"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp">
+
+                        <!-- Colors are injected via CompanionConfigActivity::fillContainer() -->
+
+                    </LinearLayout>
+                </HorizontalScrollView>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        card_view:cardCornerRadius="4dp">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/info_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/background_color_title"
-                android:textSize="24sp"
-                android:paddingTop="16dp"
-                android:textColor="@color/primary_dark_material_dark"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
-
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/background_color_subtitle"
-                android:textSize="14sp"
-                android:paddingTop="2dp"
-                android:textColor="@color/primary_dark_material_light"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            card_view:cardCornerRadius="4dp">
 
             <LinearLayout
-                android:id="@+id/background_color_holder"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp">
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-                <!-- Colors are injected via CompanionConfigActivity::fillContainer() -->
+                <TextView
+                    android:id="@+id/info_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/background_color_title"
+                    android:textSize="24sp"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/primary_dark_material_dark"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
+                <TextView
+                    android:id="@+id/subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/background_color_subtitle"
+                    android:textSize="14sp"
+                    android:paddingTop="2dp"
+                    android:textColor="@color/primary_dark_material_light"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/background_color_holder"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp">
+
+                        <!-- Colors are injected via CompanionConfigActivity::fillContainer() -->
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        card_view:cardCornerRadius="4dp">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/font_title"
-                android:textSize="24sp"
-                android:paddingTop="16dp"
-                android:textColor="@color/primary_dark_material_dark"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/font_subtitle"
-                android:textSize="14sp"
-                android:paddingTop="2dp"
-                android:textColor="@color/primary_dark_material_light"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"/>
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            card_view:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:clipToPadding="false">
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/block_font_button"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/font_title"
+                    android:textSize="24sp"
+                    android:paddingTop="16dp"
+                    android:textColor="@color/primary_dark_material_dark"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/font_subtitle"
+                    android:textSize="14sp"
+                    android:paddingTop="2dp"
+                    android:textColor="@color/primary_dark_material_light"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/block_font"
-                    android:clipToPadding="false"/>
+                    android:orientation="horizontal"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="14dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:clipToPadding="false">
 
-                <Button
-                    android:id="@+id/round_font_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/round_fond"
-                    android:clipToPadding="false"/>
+                    <Button
+                        android:id="@+id/block_font_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/block_font"/>
+
+                    <Button
+                        android:id="@+id/round_font_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/round_fond"/>
+                </LinearLayout>
+
             </LinearLayout>
 
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    </android.support.v7.widget.CardView>
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

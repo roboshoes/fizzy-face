@@ -7,21 +7,18 @@ import android.widget.LinearLayout;
 
 import com.roboshoes.fizzy.R;
 
-/**
- * Created by roboshoes on 10/12/15.
- */
 public class CircleView extends ImageView {
 
     private int color;
     private String target;
 
-    public CircleView( Context context, int color, String target ) {
+    public CircleView( Context context, int color, String target, boolean last ) {
         super( context );
 
         this.color = color;
         this.target = target;
 
-        int margin = (int) ( context.getResources().getDisplayMetrics().density * 10 );
+        int margin = last ? 0 : (int) ( context.getResources().getDisplayMetrics().density * 10 );
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,

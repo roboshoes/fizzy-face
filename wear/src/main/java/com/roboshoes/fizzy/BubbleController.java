@@ -17,12 +17,12 @@ public class BubbleController {
 
     private Paint foregroundPaint;
     private Paint backgroundPaint;
-    private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
     private String latestTime;
+    private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
     private int bubblesPerField = 1;
     private int latestFont = -1;
-    private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
     private int font = LetterFactory.ROUND_FONT;
+    private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
 
     public BubbleController( Paint backgroundPaint, Paint foregroundPaint ) {
         this.backgroundPaint = backgroundPaint;
