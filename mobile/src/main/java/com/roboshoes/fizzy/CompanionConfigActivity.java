@@ -21,17 +21,16 @@ public class CompanionConfigActivity extends Activity implements
     private static final String BACKGROUND = "com.roboshoes.color.background";
     private static final String FOREGROUND = "com.roboshoes.color.foreground";
     private static final String FONT = "com.roboshoes.font.type";
+    private static final String SHAPE = "com.roboshoes.shape.type";
+
     private static final int BLOCK_FONT = 0;
     private static final int ROUND_FONT = 1;
 
+    private static final int CIRCLE = 0;
+    private static final int PLUS = 1;
+
     private GoogleApiClient googleApiClient;
     private Boolean isConnected = false;
-
-    private LinearLayout backgroundColorHolder;
-    private LinearLayout bubbleColorHolder;
-
-    private Button blockFontButton;
-    private Button roundFontButton;
 
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
@@ -44,21 +43,21 @@ public class CompanionConfigActivity extends Activity implements
                 .addApiIfAvailable( Wearable.API )
                 .build();
 
-        backgroundColorHolder = (LinearLayout) findViewById( R.id.background_color_holder );
-        bubbleColorHolder = (LinearLayout) findViewById( R.id.bubble_color_holder );
-
-        blockFontButton = (Button) findViewById( R.id.block_font_button );
-        roundFontButton = (Button) findViewById( R.id.round_font_button );
+        LinearLayout backgroundColorHolder = (LinearLayout) findViewById( R.id.background_color_holder );
+        LinearLayout bubbleColorHolder = (LinearLayout) findViewById( R.id.bubble_color_holder );
 
         fillContainer( bubbleColorHolder, FOREGROUND );
         fillContainer( backgroundColorHolder, BACKGROUND );
 
-        initButton( blockFontButton, BLOCK_FONT );
-        initButton( roundFontButton, ROUND_FONT );
+        initFontButton( (Button) findViewById( R.id.block_font_button ), BLOCK_FONT );
+        initFontButton( (Button) findViewById( R.id.round_font_button ), ROUND_FONT );
+
+        initShapeButton( (Button) findViewById( R.id.circle_shape_button ), CIRCLE );
+        initShapeButton( (Button) findViewById( R.id.plus_shape_button ), PLUS );
     }
 
     private void fillContainer( LinearLayout container, String target ) {
-        int[] colors = target == BACKGROUND ? Colors.BACKGROUND : Colors.FOREGROUND;
+        int[] colors = target.equals( BACKGROUND ) ? Colors.BACKGROUND : Colors.FOREGROUND;
 
         for ( int i = 0; i < colors.length; i++ ) {
             CircleView circle = new CircleView( this, colors[ i ], target, i == colors.length - 1 );
@@ -79,11 +78,20 @@ public class CompanionConfigActivity extends Activity implements
         }
     }
 
-    private void initButton( Button button, final int font ) {
+    private void initFontButton( Button button, final int font ) {
         button.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick( View v ) {
                 setData( FONT, font );
+            }
+        } );
+    }
+
+    private void initShapeButton( Button button, final int shape ) {
+        button.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick( View v ) {
+                setData( SHAPE, shape );
             }
         } );
     }

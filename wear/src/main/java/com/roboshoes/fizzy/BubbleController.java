@@ -21,7 +21,8 @@ public class BubbleController {
     private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
     private int bubblesPerField = 1;
     private int latestFont = -1;
-    private int font = LetterFactory.ROUND_FONT;
+    private int font = LetterFactory.BLOCK_FONT;
+    private int shape = Bubble.PLUS;
     private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
 
     public BubbleController( Paint backgroundPaint, Paint foregroundPaint ) {
@@ -84,12 +85,31 @@ public class BubbleController {
 
             float[] position = bubble.getPosition();
 
-            canvas.drawCircle(
-                    zero[ 0 ] + position[ 0 ] * useArea[ 0 ],
-                    zero[ 1 ] + position[ 1 ] * useArea[ 1 ],
-                    bubble.getSize(),
-                    foregroundPaint
-            );
+            float x = zero[ 0 ] + position[ 0 ] * useArea[ 0 ];
+            float y = zero[ 1 ] + position[ 1 ] * useArea[ 1 ];
+
+            if ( shape == Bubble.CIRCLE ) {
+
+                canvas.drawCircle(
+                        x,
+                        y,
+                        bubble.getSize(),
+                        foregroundPaint
+                );
+
+            } else if ( shape == Bubble.PLUS ) {
+
+                float size = Math.max( bubble.getSize() * 2f, 2f );
+
+                canvas.save();
+                canvas.translate( x, y );
+                canvas.rotate( bubble.getRotation() );
+
+                canvas.drawLine( - size, 0, size, 0, foregroundPaint );
+                canvas.drawLine( 0, - size, 0, size, foregroundPaint );
+
+                canvas.restore();
+            }
         }
     }
 
@@ -116,5 +136,9 @@ public class BubbleController {
 
     public void setFont( int value ) {
         this.font = value;
+    }
+
+    public void setShape( int value ) {
+        this.shape = value;
     }
 }

@@ -22,7 +22,8 @@ public class Colors {
             0xFFFF5722,
             0xFF795548,
             0xFF9E9E9E,
-            0xFF607D8B
+            0xFF607D8B,
+            0xFFFFFFFF
     };
 
     public static final int[] BACKGROUND = {
@@ -44,7 +45,8 @@ public class Colors {
             0xFFFFAB91,
             0xFFBCAAA4,
             0xFFEEEEEE,
-            0xFFB0BEC5
+            0xFFB0BEC5,
+            0xFF000000
     };
 
 }

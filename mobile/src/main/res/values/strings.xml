@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Fizzy Face</string>
-    <string name="title_activity_main">Fizzy Face Settings</string>
+    <string name="title_activity_main">Fizzy Face</string>
 
-    <string name="bubble_color_title">Bubble Color</string>
-    <string name="bubble_color_subtitle">Choose a color for the bubbles</string>
+    <string name="bubble_color_title">Particle Color</string>
+    <string name="bubble_color_subtitle">Choose a color for the particles</string>
 
     <string name="background_color_title">Background Color</string>
     <string name="background_color_subtitle">Choose a color for the background</string>
@@ -13,4 +13,10 @@
 
     <string name="block_font">Block</string>
     <string name="round_fond">Round</string>
+
+    <string name="sprite_title">Particle Shape</string>
+    <string name="sprite_subtitle">Choose a shape for the particles</string>
+
+    <string name="plus_shape">Plus</string>
+    <string name="circle_shape">Circle</string>
 </resources>
