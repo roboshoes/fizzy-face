@@ -13,11 +13,6 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.roboshoes.fizzy.ui.CircleView;
-import com.roboshoes.fizzy.ui.Colors;
-import com.roboshoes.fizzy.utils.ArrayUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CompanionConfigActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
