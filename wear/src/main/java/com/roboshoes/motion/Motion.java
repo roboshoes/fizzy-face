@@ -36,7 +36,7 @@ public class Motion {
     }
 
     private float[] getRandomPoint() {
-        float[] point = MathUtils.polarToCartesion( ( float ) Math.random() * MathUtils.TAU, radius );
+        float[] point = MathUtils.polarToCartesion( (float) Math.random() * MathUtils.TAU, radius );
 
         point[ 0 ] += center[ 0 ];
         point[ 1 ] += center[ 1 ];
@@ -57,16 +57,26 @@ public class Motion {
         anchors[ 2 ] = getRandomPoint();
     }
 
+    private void shiftAnchors() {
+        anchors[ 0 ] = anchors[ 1 ];
+        anchors[ 1 ] = anchors[ 2 ];
+        anchors[ 2 ] = getRandomPoint();
+    }
+
     public void update( boolean fullUpdate ) {
 
-        if ( fullUpdate ) currentTime = 0.99f;
-        else currentTime += speed;
+        currentTime += speed;
 
-        if ( currentTime >= 1.0f ) {
-            anchors[ 0 ] = anchors[ 1 ];
-            anchors[ 1 ] = anchors[ 2 ];
-            anchors[ 2 ] = getRandomPoint();
+        if ( fullUpdate ) {
 
+            shiftAnchors();
+            shiftAnchors();
+            initCurve();
+            currentTime = 1.0f;
+
+        } else if ( currentTime >= 1.0f ) {
+
+            shiftAnchors();
             initCurve();
             currentTime -= 1.0f;
         }

@@ -106,12 +106,12 @@ public class FizzyFace extends CanvasWatchFaceService {
                     .setShowSystemUiTime( false )
                     .build() );
 
-            backgroundPaint = new Paint();
-            backgroundPaint.setColor( 0xFFA5D6A7 );
-
             bubblePaint = new Paint();
-            bubblePaint.setColor( 0xFF00BCD4 );
+            bubblePaint.setColor( 0xFFFFDE00 );
             bubblePaint.setAntiAlias( !isAmbient );
+
+            backgroundPaint = new Paint();
+            backgroundPaint.setColor( 0xFF2B1330 );
 
             bubbleController = new BubbleController( backgroundPaint, bubblePaint );
 
