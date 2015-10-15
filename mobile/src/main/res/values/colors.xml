@@ -1,64 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="d">#B3002F</color>
-    <color name="c">#FF0000</color>
-    <color name="i">#F44336</color>
-    <color name="j">#E91E63</color>
-    <color name="k">#9C27B0</color>
-    <color name="m">#673AB7</color>
-    <color name="n">#3F51B5</color>
-    <color name="o">#2196F3</color>
-    <color name="p">#03A9F4</color>
-    <color name="q">#00BCD4</color>
-    <color name="r">#009688</color>
-    <color name="s">#4CAF50</color>
-    <color name="t">#8BC34A</color>
-    <color name="u">#CDDC39</color>
-    <color name="v">#FFEB3B</color>
-    <color name="a">#FFDE00</color>
-    <color name="w">#FFC107</color>
-    <color name="x">#FF9800</color>
-    <color name="y">#FF5722</color>
-    <color name="z">#795548</color>
-    <color name="aa">#9E9E9E</color>
-    <color name="ab">#607D8B</color>
-    <color name="f">#3C3D3E</color>
-    <color name="ad">#000000</color>
-    <color name="h">#0A0047</color>
-    <color name="g">#210047</color>
-    <color name="b">#2B1330</color>
-    <color name="e">#D5CDB6</color>
-    <color name="ac">#FFFFFF</color>
-
-    <array name="rainbow">
-        <item>@color/a</item>
-        <item>@color/b</item>
-        <item>@color/c</item>
-        <item>@color/d</item>
-        <item>@color/e</item>
-        <item>@color/f</item>
-        <item>@color/g</item>
-        <item>@color/h</item>
-        <item>@color/i</item>
-        <item>@color/j</item>
-        <item>@color/k</item>
-        <item>@color/m</item>
-        <item>@color/n</item>
-        <item>@color/o</item>
-        <item>@color/p</item>
-        <item>@color/q</item>
-        <item>@color/r</item>
-        <item>@color/s</item>
-        <item>@color/t</item>
-        <item>@color/u</item>
-        <item>@color/v</item>
-        <item>@color/w</item>
-        <item>@color/x</item>
-        <item>@color/y</item>
-        <item>@color/z</item>
-        <item>@color/aa</item>
-        <item>@color/ab</item>
-        <item>@color/ac</item>
-        <item>@color/ad</item>
-    </array>
+    <string-array name="rainbow">
+        <item>#B3002F</item>
+        <item>#FF0000</item>
+        <item>#F44336</item>
+        <item>#E91E63</item>
+        <item>#9C27B0</item>
+        <item>#673AB7</item>
+        <item>#3F51B5</item>
+        <item>#2196F3</item>
+        <item>#03A9F4</item>
+        <item>#00BCD4</item>
+        <item>#009688</item>
+        <item>#4CAF50</item>
+        <item>#8BC34A</item>
+        <item>#CDDC39</item>
+        <item>#FFEB3B</item>
+        <item>#FFDE00</item>
+        <item>#FFC107</item>
+        <item>#FF9800</item>
+        <item>#FF5722</item>
+        <item>#795548</item>
+        <item>#9E9E9E</item>
+        <item>#607D8B</item>
+        <item>#3C3D3E</item>
+        <item>#000000</item>
+        <item>#0A0047</item>
+        <item>#210047</item>
+        <item>#2B1330</item>
+        <item>#D5CDB6</item>
+        <item>#FFFFFF</item>
+    </string-array>
 </resources>

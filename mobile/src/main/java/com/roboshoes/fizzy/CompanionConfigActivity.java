@@ -1,6 +1,7 @@
 package com.roboshoes.fizzy;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -62,10 +63,10 @@ public class CompanionConfigActivity extends Activity implements
 
     private void fillContainer( LinearLayout container, String target ) {
 
-        int[] colors = getResources().getIntArray( R.array.rainbow );
+        String[] colors = getResources().getStringArray( R.array.rainbow );
 
         for ( int i = 0; i < colors.length; i++ ) {
-            CircleView circle = new CircleView( this, colors[ i ], target, i == colors.length - 1 );
+            CircleView circle = new CircleView( this, Color.parseColor( colors[ i ] ), target, i == colors.length - 1 );
 
             circle.setOnClickListener( new View.OnClickListener() {
                 @Override
