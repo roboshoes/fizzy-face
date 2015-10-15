@@ -13,6 +13,10 @@ import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.roboshoes.fizzy.ui.CircleView;
 import com.roboshoes.fizzy.ui.Colors;
+import com.roboshoes.fizzy.utils.ArrayUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CompanionConfigActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -57,7 +61,8 @@ public class CompanionConfigActivity extends Activity implements
     }
 
     private void fillContainer( LinearLayout container, String target ) {
-        int[] colors = target.equals( BACKGROUND ) ? Colors.BACKGROUND : Colors.FOREGROUND;
+
+        int[] colors = getResources().getIntArray( R.array.rainbow );
 
         for ( int i = 0; i < colors.length; i++ ) {
             CircleView circle = new CircleView( this, colors[ i ], target, i == colors.length - 1 );

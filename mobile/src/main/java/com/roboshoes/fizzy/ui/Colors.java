@@ -3,7 +3,16 @@ package com.roboshoes.fizzy.ui;
 
 public class Colors {
 
-    public static final int[] BASE = { 0xFFFFDE00, 0xFF2B1330 };
+    public static final int[] BASE = {
+            0xFFFFDE00,
+            0xFF2B1330,
+            0xFFFF0000,
+            0xFFB3002F,
+            0xFFD5CDB6,
+            0xFF3C3D3E,
+            0xFF210047,
+            0xFF0A0047
+    };
 
     public static final int[] FOREGROUND = {
             0xFFF44336,
