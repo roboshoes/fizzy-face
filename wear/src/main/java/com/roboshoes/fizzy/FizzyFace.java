@@ -20,17 +20,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.net.Uri;
+import android.opengl.GLES20;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.wearable.watchface.CanvasWatchFaceService;
+import android.support.wearable.watchface.Gles2WatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
@@ -43,6 +42,11 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
+import com.roboshoes.fizzy.gl.Shader;
+
+import org.hai.gl.GlslProg;
+import org.hai.grfx.Camera;
+import org.hai.grfx.es2.PointMesh3D;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
@@ -51,17 +55,18 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
-public class FizzyFace extends CanvasWatchFaceService {
+public class FizzyFace extends Gles2WatchFaceService {
 
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.MILLISECONDS.toMillis( 17 );
     private static final int MSG_UPDATE_TIME = 0;
+    private static final String TAG = "com.roboshoes.fizzy";
 
     @Override
     public Engine onCreateEngine() {
         return new Engine();
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine implements
+    private class Engine extends Gles2WatchFaceService.Engine implements
             DataApi.DataListener,
             GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener  {
@@ -84,6 +89,9 @@ public class FizzyFace extends CanvasWatchFaceService {
         private Paint bubblePaint;
         private BubbleController bubbleController;
         private Time time;
+        private PointMesh3D pointMesh;
+        private GlslProg shader;
+        private Camera camera;
 
         private GoogleApiClient googleApiClient = new GoogleApiClient.Builder( FizzyFace.this )
                 .addConnectionCallbacks( this )
@@ -98,10 +106,11 @@ public class FizzyFace extends CanvasWatchFaceService {
 
         @Override
         public void onCreate( SurfaceHolder holder ) {
+
             super.onCreate( holder );
 
             setWatchFaceStyle( new WatchFaceStyle.Builder( FizzyFace.this )
-                    .setCardPeekMode( WatchFaceStyle.PEEK_MODE_VARIABLE )
+                    .setCardPeekMode( WatchFaceStyle.PEEK_MODE_SHORT )
                     .setBackgroundVisibility( WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE )
                     .setShowSystemUiTime( false )
                     .build() );
@@ -116,6 +125,38 @@ public class FizzyFace extends CanvasWatchFaceService {
             bubbleController = new BubbleController( backgroundPaint, bubblePaint );
 
             time = new Time();
+        }
+
+        @Override
+        public void onGlContextCreated() {
+            super.onGlContextCreated();
+
+            org.hai.gl.Env.initialize();
+
+            try {
+
+                shader = GlslProg.create( Shader.vertex, Shader.fragment );
+                Log.d( TAG, "Program totally worked out bro" );
+
+            } catch( Exception exception ) {
+
+                Log.d( TAG, "Shader compilation failed: " + exception.getMessage() );
+
+            }
+        }
+
+        @Override
+        public void onGlSurfaceCreated( int width, int height ) {
+            super.onGlSurfaceCreated( width, height );
+
+            bubbleController.setRect( width, height );
+
+            camera = Camera.createPixelAlignedUL( width, height );
+
+            pointMesh = new PointMesh3D();
+            pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
+            pointMesh.getPositions().setDynamicDraw();
+            pointMesh.setShader( shader );
         }
 
         @Override
@@ -233,8 +274,21 @@ public class FizzyFace extends CanvasWatchFaceService {
         }
 
         @Override
-        public void onDraw( Canvas canvas, Rect bounds ) {
+        public void onDraw() {
+            super.onDraw();
 
+            GLES20.glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+            GLES20.glClear( GLES20.GL_COLOR_BUFFER_BIT );
+
+            bubbleController.setNumber( getTimeString() );
+
+            pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
+            pointMesh.drawBegin();
+            pointMesh.draw( camera );
+            pointMesh.drawEnd();
+        }
+
+        private String getTimeString() {
             Calendar calendar = Calendar.getInstance();
 
             int hours = calendar.get( Calendar.HOUR );
@@ -242,10 +296,7 @@ public class FizzyFace extends CanvasWatchFaceService {
 
             if ( hours == 0 ) hours = 12;
 
-            String timeString = String.format( "%02d%02d", hours, minutes );
-
-            bubbleController.setNumber( timeString );
-            bubbleController.draw( canvas, bounds, isAmbient, isRound );
+            return String.format( "%02d%02d", hours, minutes );
         }
 
         /**
