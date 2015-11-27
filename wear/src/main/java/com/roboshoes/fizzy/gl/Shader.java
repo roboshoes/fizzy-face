@@ -8,12 +8,10 @@ public class Shader {
 
     public static final String vertex =
             "attribute vec4 vPosition;" + NL +
-            "attribute vec2 vTexCoord;" + NL +
             "uniform mat4 mvp;" + NL +
-            "uniform mat4 xform;" + NL +
             "void main() {" + NL +
             "   gl_PointSize = 3.0;" + NL +
-            "   gl_Position = mvp * xform * vPosition;" + NL +
+            "   gl_Position = mvp * vPosition;" + NL +
             "}";
 
     public static final String fragment =

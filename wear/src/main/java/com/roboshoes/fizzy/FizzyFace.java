@@ -43,6 +43,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 import com.roboshoes.fizzy.gl.Shader;
+import com.roboshoes.utils.Colors;
 
 import org.hai.gl.GlslProg;
 import org.hai.grfx.Camera;
@@ -85,8 +86,8 @@ public class FizzyFace extends Gles2WatchFaceService {
         private static final String FONT = "com.roboshoes.font.type";
         private static final String SHAPE = "com.roboshoes.shape.type";
 
-        private Paint backgroundPaint;
-        private Paint bubblePaint;
+
+        private float[] backgroundColor;
         private BubbleController bubbleController;
         private Time time;
         private PointMesh3D pointMesh;
@@ -106,7 +107,6 @@ public class FizzyFace extends Gles2WatchFaceService {
 
         @Override
         public void onCreate( SurfaceHolder holder ) {
-
             super.onCreate( holder );
 
             setWatchFaceStyle( new WatchFaceStyle.Builder( FizzyFace.this )
@@ -115,14 +115,10 @@ public class FizzyFace extends Gles2WatchFaceService {
                     .setShowSystemUiTime( false )
                     .build() );
 
-            bubblePaint = new Paint();
-            bubblePaint.setColor( 0xFFFFDE00 );
-            bubblePaint.setAntiAlias( !isAmbient );
 
-            backgroundPaint = new Paint();
-            backgroundPaint.setColor( 0xFF2B1330 );
+            backgroundColor = Colors.intToFloats( 0xFF2B1330 );
 
-            bubbleController = new BubbleController( backgroundPaint, bubblePaint );
+            bubbleController = new BubbleController();
 
             time = new Time();
         }
@@ -136,13 +132,13 @@ public class FizzyFace extends Gles2WatchFaceService {
             try {
 
                 shader = GlslProg.create( Shader.vertex, Shader.fragment );
-                Log.d( TAG, "Program totally worked out bro" );
 
             } catch( Exception exception ) {
 
                 Log.d( TAG, "Shader compilation failed: " + exception.getMessage() );
 
             }
+
         }
 
         @Override
@@ -172,10 +168,12 @@ public class FizzyFace extends Gles2WatchFaceService {
                     final DataMap map = DataMapItem.fromDataItem( event.getDataItem() ).getDataMap();
 
                     if ( map.containsKey( BACKGROUND ) )
-                        backgroundPaint.setColor( map.getInt( BACKGROUND ) );
+                        backgroundColor = Colors.intToFloats( map.getInt( BACKGROUND ) );
 
-                    if ( map.containsKey( FOREGROUND ) )
-                        bubblePaint.setColor( map.getInt( FOREGROUND ) );
+                    if ( map.containsKey( FOREGROUND ) ) {
+                        float[] color = Colors.intToFloats( map.getInt( FOREGROUND ) );
+                        shader.uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
+                    }
 
                     if ( map.containsKey( FONT ) )
                         bubbleController.setFont( map.getInt( FONT ) );
@@ -253,7 +251,6 @@ public class FizzyFace extends Gles2WatchFaceService {
         @Override
         public void onTimeTick() {
             super.onTimeTick();
-            invalidate();
         }
 
         @Override
@@ -264,10 +261,9 @@ public class FizzyFace extends Gles2WatchFaceService {
                 isAmbient = inAmbientMode;
 
                 if ( isLowBitAmbient ) {
-                    bubblePaint.setAntiAlias( !inAmbientMode );
+//                    bubblePaint.setAntiAlias( !inAmbientMode );
                 }
 
-                invalidate();
             }
 
             updateTimer();
@@ -277,13 +273,16 @@ public class FizzyFace extends Gles2WatchFaceService {
         public void onDraw() {
             super.onDraw();
 
-            GLES20.glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+            GLES20.glClearColor( backgroundColor[ 1 ], backgroundColor[ 2 ], backgroundColor[ 3 ], 1.0f );
             GLES20.glClear( GLES20.GL_COLOR_BUFFER_BIT );
 
             bubbleController.setNumber( getTimeString() );
 
+            float[] color = Colors.intToFloats( 0xFFFFDE00 );
+
             pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
             pointMesh.drawBegin();
+            pointMesh.getShader().uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
             pointMesh.draw( camera );
             pointMesh.drawEnd();
         }

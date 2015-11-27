@@ -1,7 +1,5 @@
 package com.roboshoes.fizzy;
 
-import android.graphics.Paint;
-
 import com.roboshoes.fizzy.font.BlockLetter;
 import com.roboshoes.fizzy.font.LetterFactory;
 
@@ -12,8 +10,6 @@ public class BubbleController {
     private static final int GRID_SIZE = BlockLetter.zero.length;
     private static final int BUBBLE_COUNT = 400;
 
-    private Paint foregroundPaint;
-    private Paint backgroundPaint;
     private String latestTime;
     private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
     private int bubblesPerField = 1;
@@ -24,10 +20,7 @@ public class BubbleController {
     private int width = 0;
     private int height = 0;
 
-    public BubbleController( Paint backgroundPaint, Paint foregroundPaint ) {
-        this.backgroundPaint = backgroundPaint;
-        this.foregroundPaint = foregroundPaint;
-
+    public BubbleController() {
         for ( int i = 0; i < BUBBLE_COUNT; i++ ) {
             bubbles[ i ] = new Bubble( 0.5f, 0.5f );
         }
@@ -162,7 +155,9 @@ public class BubbleController {
                 height / 2.0f - useArea[ 0 ] / 2.0f
         };
 
-        for ( int i = 0; i < bubbles.length; i += 3 ) {
+        for ( int i = 0; i < bubbles.length * 3; i += 3 ) {
+
+            bubbles[ i / 3 ].update( false );
 
             float[] xy = bubbles[ i / 3 ].getPosition();
 
