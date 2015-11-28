@@ -12,6 +12,7 @@ public abstract class Mesh3D {
 
     private Vbo mIndices                = null;
     private Vbo mPositions              = null;
+    private Vbo mPointSizes             = null;
     private Vbo mNormals                = null;
     private Vbo mTexCoords              = null;
     private GlslProg mShaderProg        = null;
@@ -19,8 +20,10 @@ public abstract class Mesh3D {
     private boolean mPositionsEnabled   = false;
     private boolean mNormalsEnabled     = false;
     private boolean mTexCoordsEnabled   = false;
+    private boolean mPointSizeEnabled   = false;
 
     private int mPositionsLocation      = -1;
+    private int mPointSizeLocation      = -1;
     private int mNormalsLocation        = -1;
     private int mTexCoordsLocation      = -1;
 
@@ -56,6 +59,10 @@ public abstract class Mesh3D {
         if(null != mTexCoords) {
             mTexCoords.destroy();
         }
+
+        if(null != mPointSizes) {
+            mPointSizes.destroy();
+        }
     }
 
     /** getIndices
@@ -77,6 +84,13 @@ public abstract class Mesh3D {
      */
     public Vbo getNormals() {
         return mNormals;
+    }
+
+    /** getPointSizes
+     *
+     */
+    public Vbo getPointSizes() {
+        return mPointSizes;
     }
 
     /** getTexCoords
@@ -131,6 +145,16 @@ public abstract class Mesh3D {
         }        
     }
 
+    /** enableNormals
+     *
+     */
+    private void enablePointSize() {
+        if((! mPointSizeEnabled) && (-1 != mPointSizeLocation) && (null != mPointSizes)) {
+            mPointSizes.enableAttrib(mPointSizeLocation, 1);
+            mPointSizeEnabled = true;
+        }
+    }
+
     /** enableTexCoords
      *
      */
@@ -161,6 +185,17 @@ public abstract class Mesh3D {
         }
         mNormalsEnabled = false;
         mNormalsLocation = -1;
+    }
+
+    /** disablePointSize
+     *
+     */
+    private void disablePointSize() {
+        if(null != mPointSizes) {
+            mPointSizes.disableAttrib();
+        }
+        mPointSizeEnabled = false;
+        mPointSizeLocation = -1;
     }
 
     /** disableTexCoords
@@ -213,6 +248,27 @@ public abstract class Mesh3D {
         }
     }
 
+
+    /** bufferPositions
+     *
+     * @param data Position data
+     *
+     */
+    public void bufferPointSize(float[] data) {
+        if(null == mPointSizes) {
+            mPointSizes = Vbo.createFloatBuffer();
+            enablePointSize();
+        }
+
+        mPointSizes.bind();
+        mPointSizes.bufferData(data);
+        mPointSizes.unbind();
+
+        if(null == mPointSizes) {
+            setNumActiveVertices(data.length);
+        }
+    }
+
     /** bufferNormals
      *
      * @param data Normal data
@@ -258,14 +314,17 @@ public abstract class Mesh3D {
             disablePositions();
             disableNormals();
             disableTexCoords();
+            disablePointSize();
 
             mPositionsLocation = mShaderProg.getAttribLocation("vPosition");
             mNormalsLocation = mShaderProg.getAttribLocation("vNormal");
             mTexCoordsLocation = mShaderProg.getAttribLocation("vTexCoord");
+            mPointSizeLocation = mShaderProg.getAttribLocation( "pointSize" );
 
             enablePositions();
             enableNormals();
             enableTexCoords();
+            enablePointSize();
         }
     }
 
@@ -284,6 +343,10 @@ public abstract class Mesh3D {
 
         if(null != mPositions) {
             mPositions.drawBegin();
+        }
+
+        if(null != mPointSizes) {
+            mPointSizes.drawBegin();
         }
 
         if(null != mNormals) {
@@ -313,6 +376,10 @@ public abstract class Mesh3D {
 
         if(null != mTexCoords) {
             mTexCoords.drawEnd();
+        }
+
+        if(null != mPointSizes) {
+            mPointSizes.drawEnd();
         }
         getShader().unbind();
     }

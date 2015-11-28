@@ -153,6 +153,7 @@ public class FizzyFace extends Gles2WatchFaceService {
 
             pointMesh = new PointMesh3D();
             pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
+            pointMesh.bufferPointSize( bubbleController.getSizes() );
             pointMesh.getPositions().setDynamicDraw();
             pointMesh.setShader( shader );
         }
@@ -288,6 +289,7 @@ public class FizzyFace extends Gles2WatchFaceService {
             float[] color = Colors.intToFloats( 0xFFFFDE00 );
 
             pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
+            pointMesh.bufferPointSize( bubbleController.getSizes() );
             pointMesh.drawBegin();
             pointMesh.getShader().uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
             pointMesh.getShader().uniform( "screensize", screenSize[ 0 ], screenSize[ 1 ] );

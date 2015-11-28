@@ -168,4 +168,14 @@ public class BubbleController {
 
         return positions;
     }
+
+    public float[] getSizes() {
+        float[] sizes = new float[ BUBBLE_COUNT ];
+
+        for( int i = 0; i < BUBBLE_COUNT; i++ ) {
+            sizes[ i ] = bubbles[ i ].getSize();
+        }
+
+        return sizes;
+    }
 }

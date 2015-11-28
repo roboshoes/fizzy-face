@@ -8,19 +8,20 @@ public class Shader {
 
     public static final String vertex =
             "attribute vec4 vPosition;" + NL +
+            "attribute float pointSize;" + NL +
             "uniform mat4 mvp;" + NL +
             "uniform vec2 screensize;" + NL +
             "varying float radius;" + NL +
             "varying vec2 screenPosition;" + NL +
 
             "void main() {" + NL +
-            "    gl_PointSize = 6.0;" + NL +
+            "    gl_PointSize = pointSize;" + NL +
             "    gl_Position = mvp * vPosition;" + NL +
 
             "    vec3 ndc = gl_Position.xyz / gl_Position.w;" + NL +
 
             "    screenPosition = ( ndc.xy * 0.5 + 0.5 ) * screensize;" + NL +
-            "    radius = 3.0;" + NL +
+            "    radius = pointSize / 2.0;" + NL +
             "}";
 
     public static final String fragment =
