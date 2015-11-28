@@ -20,7 +20,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Paint;
 import android.net.Uri;
 import android.opengl.GLES20;
 import android.os.Bundle;
@@ -93,6 +92,7 @@ public class FizzyFace extends Gles2WatchFaceService {
         private PointMesh3D pointMesh;
         private GlslProg shader;
         private Camera camera;
+        private int[] screenSize;
 
         private GoogleApiClient googleApiClient = new GoogleApiClient.Builder( FizzyFace.this )
                 .addConnectionCallbacks( this )
@@ -144,6 +144,8 @@ public class FizzyFace extends Gles2WatchFaceService {
         @Override
         public void onGlSurfaceCreated( int width, int height ) {
             super.onGlSurfaceCreated( width, height );
+
+            screenSize = new int[] { width, height };
 
             bubbleController.setRect( width, height );
 
@@ -273,8 +275,13 @@ public class FizzyFace extends Gles2WatchFaceService {
         public void onDraw() {
             super.onDraw();
 
+            GLES20.glDisable( GLES20.GL_CULL_FACE );
+            GLES20.glDisable( GLES20.GL_DEPTH_TEST );
+
             GLES20.glClearColor( backgroundColor[ 1 ], backgroundColor[ 2 ], backgroundColor[ 3 ], 1.0f );
             GLES20.glClear( GLES20.GL_COLOR_BUFFER_BIT );
+            GLES20.glEnable( GLES20.GL_BLEND );
+            GLES20.glBlendFunc( GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA );
 
             bubbleController.setNumber( getTimeString() );
 
@@ -283,6 +290,7 @@ public class FizzyFace extends Gles2WatchFaceService {
             pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
             pointMesh.drawBegin();
             pointMesh.getShader().uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
+            pointMesh.getShader().uniform( "screensize", screenSize[ 0 ], screenSize[ 1 ] );
             pointMesh.draw( camera );
             pointMesh.drawEnd();
         }
