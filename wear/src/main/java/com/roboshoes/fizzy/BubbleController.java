@@ -8,14 +8,13 @@ import java.util.ArrayList;
 public class BubbleController {
 
     private static final int GRID_SIZE = BlockLetter.zero.length;
-    private static final int BUBBLE_COUNT = 400;
+    private static final int BUBBLE_COUNT = 600;
 
     private String latestTime;
     private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
     private int bubblesPerField = 1;
     private int latestFont = -1;
     private int font = LetterFactory.BLOCK_FONT;
-    private int shape = Bubble.PLUS;
     private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
     private int width = 0;
     private int height = 0;
@@ -57,54 +56,6 @@ public class BubbleController {
         }
     }
 
-//    public void draw( Canvas canvas, Rect bounding, boolean fullUpdate, boolean isRound ) {
-//        canvas.drawRect( 0, 0, bounding.width(), bounding.height(), backgroundPaint );
-//
-//        float scale = isRound ? 0.6f : 0.75f;
-//
-//        float[] useArea = new float[] {
-//                (float) bounding.width() * scale,
-//                (float) bounding.height() * scale
-//        };
-//
-//        float[] zero = new float[] {
-//                bounding.width() / 2.0f - useArea[ 0 ] / 2.0f,
-//                bounding.height() / 2.0f - useArea[ 0 ] / 2.0f
-//        };
-//
-//        for ( Bubble bubble : bubbles ) {
-//            bubble.update( fullUpdate );
-//
-//            float[] position = bubble.getPosition();
-//
-//            float x = zero[ 0 ] + position[ 0 ] * useArea[ 0 ];
-//            float y = zero[ 1 ] + position[ 1 ] * useArea[ 1 ];
-//
-//            if ( shape == Bubble.CIRCLE ) {
-//
-//                canvas.drawCircle(
-//                        x,
-//                        y,
-//                        bubble.getSize(),
-//                        foregroundPaint
-//                );
-//
-//            } else if ( shape == Bubble.PLUS ) {
-//
-//                float size = Math.max( bubble.getSize() * 2f, 2f );
-//
-//                canvas.save();
-//                canvas.translate( x, y );
-//                canvas.rotate( bubble.getRotation() );
-//
-//                canvas.drawLine( - size, 0, size, 0, foregroundPaint );
-//                canvas.drawLine( 0, - size, 0, size, foregroundPaint );
-//
-//                canvas.restore();
-//            }
-//        }
-//    }
-
     public void setNumber( String time ) {
         if ( time.equals( latestTime ) && latestFont == font ) return;
 
@@ -133,10 +84,6 @@ public class BubbleController {
 
     public void setFont( int value ) {
         this.font = value;
-    }
-
-    public void setShape( int value ) {
-        this.shape = value;
     }
 
     public float[] getPositions3D( boolean isRound ) {

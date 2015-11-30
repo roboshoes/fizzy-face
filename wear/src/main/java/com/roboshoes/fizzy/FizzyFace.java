@@ -181,8 +181,8 @@ public class FizzyFace extends Gles2WatchFaceService {
                     if ( map.containsKey( FONT ) )
                         bubbleController.setFont( map.getInt( FONT ) );
 
-                    if ( map.containsKey( SHAPE  ) )
-                        bubbleController.setShape( map.getInt( SHAPE ) );
+                    if ( map.containsKey( SHAPE  ) ) {}
+//                        bubbleController.setShape( map.getInt( SHAPE ) );
                 }
             }
         }

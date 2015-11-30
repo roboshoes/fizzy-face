@@ -28,6 +28,7 @@ public class Shader {
             "precision mediump float;" + NL +
             "uniform vec3 color;" + NL +
             "uniform vec2 screensize;" + NL +
+            "uniform int shape;" + NL +
             "varying float radius;" + NL +
             "varying vec2 screenPosition;" + NL +
             "void main() {" + NL +

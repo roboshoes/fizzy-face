@@ -5,19 +5,23 @@ import java.util.ArrayList;
 
 public class Bezier {
 
-    private float mPercent = 0.0f;
-    private ArrayList<float[]> mAnchors = new ArrayList<>();
+    private float percent = 0.0f;
+    private ArrayList<float[]> anchors = new ArrayList<>();
     private float x = 0.0f;
     private float y = 0.0f;
 
     public void addAnchor( float[] point ) {
-        mAnchors.add( point );
+        anchors.add( point );
         update();
     }
 
     public void setTime( float time ) {
-        mPercent = time;
+        percent = time;
         update();
+    }
+
+    public void clear() {
+        anchors.clear();
     }
 
     public float[] getPosition() {
@@ -27,18 +31,18 @@ public class Bezier {
     private void update() {
 
         int i, j;
-        float[][] points = new float[ mAnchors.size() ][ 2 ];
-        int length = mAnchors.size();
+        float[][] points = new float[ anchors.size() ][ 2 ];
+        int length = anchors.size();
 
-        for ( i = 0; i < mAnchors.size(); i++ ) {
-            points[ i ][ 0 ] = mAnchors.get( i )[ 0 ];
-            points[ i ][ 1 ] = mAnchors.get( i )[ 1 ];
+        for ( i = 0; i < anchors.size(); i++ ) {
+            points[ i ][ 0 ] = anchors.get( i )[ 0 ];
+            points[ i ][ 1 ] = anchors.get( i )[ 1 ];
         }
 
         for ( j = 1; j < length; j++ ) {
             for ( i = 0; i < length - i; i++ ) {
-                points[ i ][ 0 ] = ( 1.0f - mPercent ) * points[ i ][ 0 ] + mPercent * points[ i + 1 ][ 0 ];
-                points[ i ][ 1 ] = ( 1.0f - mPercent ) * points[ i ][ 1 ] + mPercent * points[ i + 1 ][ 1 ];
+                points[ i ][ 0 ] = ( 1.0f - percent ) * points[ i ][ 0 ] + percent * points[ i + 1 ][ 0 ];
+                points[ i ][ 1 ] = ( 1.0f - percent ) * points[ i ][ 1 ] + percent * points[ i + 1 ][ 1 ];
             }
         }
 
