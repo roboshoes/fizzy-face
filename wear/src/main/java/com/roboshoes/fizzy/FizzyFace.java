@@ -87,6 +87,7 @@ public class FizzyFace extends Gles2WatchFaceService {
 
 
         private float[] backgroundColor;
+        private int shape = Bubble.PLUS;
         private BubbleController bubbleController;
         private Time time;
         private PointMesh3D pointMesh;
@@ -181,8 +182,8 @@ public class FizzyFace extends Gles2WatchFaceService {
                     if ( map.containsKey( FONT ) )
                         bubbleController.setFont( map.getInt( FONT ) );
 
-                    if ( map.containsKey( SHAPE  ) ) {}
-//                        bubbleController.setShape( map.getInt( SHAPE ) );
+                    if ( map.containsKey( SHAPE  ) )
+                        shape = map.getInt( SHAPE );
                 }
             }
         }
@@ -288,11 +289,14 @@ public class FizzyFace extends Gles2WatchFaceService {
 
             float[] color = Colors.intToFloats( 0xFFFFDE00 );
 
+            bubbleController.update();
+
             pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
             pointMesh.bufferPointSize( bubbleController.getSizes() );
             pointMesh.drawBegin();
             pointMesh.getShader().uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
-            pointMesh.getShader().uniform( "screensize", screenSize[ 0 ], screenSize[ 1 ] );
+            pointMesh.getShader().uniform( "screenSize", screenSize[ 0 ], screenSize[ 1 ] );
+            pointMesh.getShader().uniform( "shape", shape);
             pointMesh.draw( camera );
             pointMesh.drawEnd();
         }

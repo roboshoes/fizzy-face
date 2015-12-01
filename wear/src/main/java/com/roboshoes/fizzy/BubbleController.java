@@ -18,6 +18,7 @@ public class BubbleController {
     private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
     private int width = 0;
     private int height = 0;
+    private boolean dirty = false;
 
     public BubbleController() {
         for ( int i = 0; i < BUBBLE_COUNT; i++ ) {
@@ -86,6 +87,10 @@ public class BubbleController {
         this.font = value;
     }
 
+    public void update() {
+        dirty = true;
+    }
+
     public float[] getPositions3D( boolean isRound ) {
 
         float[] positions = new float[ 3 * BUBBLE_COUNT ];
@@ -104,7 +109,7 @@ public class BubbleController {
 
         for ( int i = 0; i < bubbles.length * 3; i += 3 ) {
 
-            bubbles[ i / 3 ].update( false );
+            if ( dirty ) bubbles[ i / 3 ].update( false );
 
             float[] xy = bubbles[ i / 3 ].getPosition();
 
@@ -113,15 +118,23 @@ public class BubbleController {
             positions[ i + 2 ] = 0.0f;
         }
 
+        dirty = false;
+
         return positions;
     }
 
     public float[] getSizes() {
+
         float[] sizes = new float[ BUBBLE_COUNT ];
 
         for( int i = 0; i < BUBBLE_COUNT; i++ ) {
+
+            if ( dirty ) bubbles[ i / 3 ].update( false );
+
             sizes[ i ] = bubbles[ i ].getSize();
         }
+
+        dirty = false;
 
         return sizes;
     }
