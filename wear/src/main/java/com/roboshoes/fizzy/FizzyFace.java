@@ -41,6 +41,7 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
+import com.roboshoes.fizzy.font.LetterFactory;
 import com.roboshoes.fizzy.gl.Shader;
 import com.roboshoes.utils.Colors;
 
@@ -87,7 +88,8 @@ public class FizzyFace extends Gles2WatchFaceService {
 
 
         private float[] backgroundColor;
-        private int shape = Bubble.PLUS;
+        private float[] bubbleColor;
+        private int shape = Bubble.CIRCLE;
         private BubbleController bubbleController;
         private Time time;
         private PointMesh3D pointMesh;
@@ -118,6 +120,7 @@ public class FizzyFace extends Gles2WatchFaceService {
 
 
             backgroundColor = Colors.intToFloats( 0xFF2B1330 );
+            bubbleColor = Colors.intToFloats( 0xFFFFDE00 );
 
             bubbleController = new BubbleController();
 
@@ -149,6 +152,7 @@ public class FizzyFace extends Gles2WatchFaceService {
             screenSize = new int[] { width, height };
 
             bubbleController.setRect( width, height );
+            bubbleController.setFont( LetterFactory.ROUND_FONT );
 
             camera = Camera.createPixelAlignedUL( width, height );
 
@@ -174,16 +178,18 @@ public class FizzyFace extends Gles2WatchFaceService {
                     if ( map.containsKey( BACKGROUND ) )
                         backgroundColor = Colors.intToFloats( map.getInt( BACKGROUND ) );
 
-                    if ( map.containsKey( FOREGROUND ) ) {
-                        float[] color = Colors.intToFloats( map.getInt( FOREGROUND ) );
-                        shader.uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
+                    if ( map.containsKey( FOREGROUND ) )
+                        bubbleColor = Colors.intToFloats( map.getInt( FOREGROUND ) );
+
+                    if ( map.containsKey( FONT ) ) {
+                        bubbleController.setFont( map.getInt( FONT ) );
+                        Log.i( "mathias", "set shape to " + map.getInt( FONT ) );
                     }
 
-                    if ( map.containsKey( FONT ) )
-                        bubbleController.setFont( map.getInt( FONT ) );
-
-                    if ( map.containsKey( SHAPE  ) )
+                    if ( map.containsKey( SHAPE  ) ) {
                         shape = map.getInt( SHAPE );
+                        Log.i( "mathias", "set shape to " + shape );
+                    }
                 }
             }
         }
@@ -286,17 +292,14 @@ public class FizzyFace extends Gles2WatchFaceService {
             GLES20.glBlendFunc( GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA );
 
             bubbleController.setNumber( getTimeString() );
-
-            float[] color = Colors.intToFloats( 0xFFFFDE00 );
-
-            bubbleController.update();
+            bubbleController.update( isAmbient );
 
             pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
             pointMesh.bufferPointSize( bubbleController.getSizes() );
             pointMesh.drawBegin();
-            pointMesh.getShader().uniform( "color", color[ 1 ], color[ 2 ], color[ 3 ] );
+            pointMesh.getShader().uniform( "color", bubbleColor[ 1 ], bubbleColor[ 2 ], bubbleColor[ 3 ] );
             pointMesh.getShader().uniform( "screenSize", screenSize[ 0 ], screenSize[ 1 ] );
-            pointMesh.getShader().uniform( "shape", shape);
+            pointMesh.getShader().uniform( "shape", shape );
             pointMesh.draw( camera );
             pointMesh.drawEnd();
         }

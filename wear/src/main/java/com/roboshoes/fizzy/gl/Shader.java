@@ -6,6 +6,8 @@ public class Shader {
 
 
     public static final String vertex =
+            "precision mediump float;\n" +
+            "\n" +
             "attribute vec4 vPosition;\n" +
             "attribute float pointSize;\n" +
             "\n" +
@@ -13,7 +15,7 @@ public class Shader {
             "uniform vec2 screenSize;\n" +
             "\n" +
             "varying float radius;\n" +
-            "varying vec2 screenPosition;\n" +
+            "varying vec2 vertex;\n" +
             "\n" +
             "void main() {\n" +
             "    gl_PointSize = pointSize;\n" +
@@ -21,7 +23,7 @@ public class Shader {
             "\n" +
             "    vec3 ndc = gl_Position.xyz / gl_Position.w;\n" +
             "\n" +
-            "    screenPosition = ( ndc.xy * 0.5 + 0.5 ) * screenSize;\n" +
+            "    vertex = ( ndc.xy * 0.5 + 0.5 ) * screenSize;\n" +
             "    radius = pointSize / 2.0;\n" +
             "}";
 
@@ -33,22 +35,23 @@ public class Shader {
             "uniform float shape;\n" +
             "\n" +
             "varying float radius;\n" +
-            "varying vec2 screenPosition;\n" +
+            "varying vec2 vertex;\n" +
             "\n" +
-            "const float HALF_PI = 1.570796327f;\n" +
+            "const float HALF_PI = 1.570796327;\n" +
             "\n" +
             "void main() {\n" +
             "\n" +
-            "    vec2 particlePosition = vec2( gl_FragCoord.x, screenSize.y - gl_FragCoord.y );\n" +
-            "    float length = distance( particlePosition, screenPosition );\n" +
+            "    vec2 pixel = vec2( gl_FragCoord.x, screenSize.y - gl_FragCoord.y );\n" +
+            "    float len = distance( pixel, vertex );\n" +
+            "    float alpha = 1.0;\n" +
             "\n" +
             "    if ( shape < 0.5 ) {\n" +
             "\n" +
-            "        if ( length > radius ) discard;\n" +
+            "        if ( len > radius ) discard;\n" +
             "\n" +
-            "        if ( length > radius * 0.25 ) {\n" +
+            "        if ( len > radius * 0.25 ) {\n" +
             "\n" +
-            "            float alpha = 1.0 - smoothstep( radius * 0.25, radius, length );\n" +
+            "            alpha = 1.0 - smoothstep( radius * 0.25, radius, len );\n" +
             "            alpha *= alpha;\n" +
             "\n" +
             "            gl_FragColor = vec4( color, alpha );\n" +
@@ -61,7 +64,7 @@ public class Shader {
             "\n" +
             "    } else {\n" +
             "\n" +
-            "        vec2 distances = screenPosition - particlePosition;\n" +
+            "        vec2 distances = vertex - pixel;\n" +
             "\n" +
             "        distances /= radius;\n" +
             "        distances *= HALF_PI;\n" +

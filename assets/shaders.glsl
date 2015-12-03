@@ -4,6 +4,8 @@
 
 // == vertex == //
 
+precision mediump float;
+
 attribute vec4 vPosition;
 attribute float pointSize;
 
@@ -11,7 +13,7 @@ uniform mat4 mvp;
 uniform vec2 screenSize;
 
 varying float radius;
-varying vec2 screenPosition;
+varying vec2 vertex;
 
 void main() {
     gl_PointSize = pointSize;
@@ -19,7 +21,7 @@ void main() {
 
     vec3 ndc = gl_Position.xyz / gl_Position.w;
 
-    screenPosition = ( ndc.xy * 0.5 + 0.5 ) * screenSize;
+    vertex = ( ndc.xy * 0.5 + 0.5 ) * screenSize;
     radius = pointSize / 2.0;
 }
 
@@ -33,22 +35,22 @@ uniform vec2 screenSize;
 uniform float shape;
 
 varying float radius;
-varying vec2 screenPosition;
+varying vec2 vertex;
 
-const float HALF_PI = 1.570796327f;
+const float HALF_PI = 1.570796327;
 
 void main() {
 
-    vec2 particlePosition = vec2( gl_FragCoord.x, screenSize.y - gl_FragCoord.y );
-    float length = distance( particlePosition, screenPosition );
+    vec2 pixel = gl_FragColor.xy;
+    float len = distance( pixel, vertex );
 
     if ( shape < 0.5 ) {
 
-        if ( length > radius ) discard;
+        if ( len > radius ) discard;
 
-        if ( length > radius * 0.25 ) {
+        if ( len > radius * 0.25 ) {
 
-            float alpha = 1.0 - smoothstep( radius * 0.25, radius, length );
+            float alpha = 1.0 - smoothstep( radius * 0.25, radius, len );
             alpha *= alpha;
 
             gl_FragColor = vec4( color, alpha );
@@ -61,7 +63,7 @@ void main() {
 
     } else {
 
-        vec2 distances = screenPosition - particlePosition;
+        vec2 distances = vertex - pixel;
 
         distances /= radius;
         distances *= HALF_PI;

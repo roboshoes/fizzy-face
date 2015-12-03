@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class BubbleController {
 
     private static final int GRID_SIZE = BlockLetter.zero.length;
-    private static final int BUBBLE_COUNT = 600;
+    private static final int BUBBLE_COUNT = 700;
 
     private String latestTime;
     private Bubble[] bubbles = new Bubble[ BUBBLE_COUNT ];
@@ -18,7 +18,8 @@ public class BubbleController {
     private int[][] numbers = new int[ 4 ][ GRID_SIZE ];
     private int width = 0;
     private int height = 0;
-    private boolean dirty = false;
+    private boolean isDirty = false;
+    private boolean isFullUpdate = false;
 
     public BubbleController() {
         for ( int i = 0; i < BUBBLE_COUNT; i++ ) {
@@ -87,8 +88,9 @@ public class BubbleController {
         this.font = value;
     }
 
-    public void update() {
-        dirty = true;
+    public void update( boolean fullUpdate ) {
+        isFullUpdate = fullUpdate;
+        isDirty = true;
     }
 
     public float[] getPositions3D( boolean isRound ) {
@@ -109,7 +111,7 @@ public class BubbleController {
 
         for ( int i = 0; i < bubbles.length * 3; i += 3 ) {
 
-            if ( dirty ) bubbles[ i / 3 ].update( false );
+            if ( isDirty ) bubbles[ i / 3 ].update( isFullUpdate );
 
             float[] xy = bubbles[ i / 3 ].getPosition();
 
@@ -118,7 +120,8 @@ public class BubbleController {
             positions[ i + 2 ] = 0.0f;
         }
 
-        dirty = false;
+        isDirty = false;
+        isFullUpdate = false;
 
         return positions;
     }
@@ -129,12 +132,13 @@ public class BubbleController {
 
         for( int i = 0; i < BUBBLE_COUNT; i++ ) {
 
-            if ( dirty ) bubbles[ i / 3 ].update( false );
+            if ( isDirty ) bubbles[ i / 3 ].update( isFullUpdate );
 
             sizes[ i ] = bubbles[ i ].getSize();
         }
 
-        dirty = false;
+        isDirty = false;
+        isFullUpdate = false;
 
         return sizes;
     }
