@@ -15,7 +15,7 @@ public class Bubble {
 
     public Bubble( float x, float y ) {
         motion = new Motion( 0.03f, MathUtils.random( 0.05f, 0.1f ), new float[] { x, y } );
-        pulse = new Pulse( 1, 3, MathUtils.random( 0.01f, 0.05f ) );
+        pulse = new Pulse( 3, 8, MathUtils.random( 0.01f, 0.05f ) );
         rotation = new Pulse( -180, 180, MathUtils.random( 0.01f, 0.05f ) );
     }
 

@@ -20,17 +20,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.net.Uri;
+import android.opengl.GLES20;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.wearable.watchface.CanvasWatchFaceService;
+import android.support.wearable.watchface.Gles2WatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
@@ -43,6 +41,13 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
+import com.roboshoes.fizzy.font.LetterFactory;
+import com.roboshoes.fizzy.gl.Shader;
+import com.roboshoes.utils.Colors;
+
+import org.hai.gl.GlslProg;
+import org.hai.grfx.Camera;
+import org.hai.grfx.es2.PointMesh3D;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
@@ -51,17 +56,18 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
-public class FizzyFace extends CanvasWatchFaceService {
+public class FizzyFace extends Gles2WatchFaceService {
 
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.MILLISECONDS.toMillis( 17 );
     private static final int MSG_UPDATE_TIME = 0;
+    private static final String TAG = "com.roboshoes.fizzy";
 
     @Override
     public Engine onCreateEngine() {
         return new Engine();
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine implements
+    private class Engine extends Gles2WatchFaceService.Engine implements
             DataApi.DataListener,
             GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener  {
@@ -80,10 +86,16 @@ public class FizzyFace extends CanvasWatchFaceService {
         private static final String FONT = "com.roboshoes.font.type";
         private static final String SHAPE = "com.roboshoes.shape.type";
 
-        private Paint backgroundPaint;
-        private Paint bubblePaint;
+
+        private float[] backgroundColor;
+        private float[] bubbleColor;
+        private int shape = Bubble.CIRCLE;
         private BubbleController bubbleController;
         private Time time;
+        private PointMesh3D pointMesh;
+        private GlslProg shader;
+        private Camera camera;
+        private int[] screenSize;
 
         private GoogleApiClient googleApiClient = new GoogleApiClient.Builder( FizzyFace.this )
                 .addConnectionCallbacks( this )
@@ -101,21 +113,54 @@ public class FizzyFace extends CanvasWatchFaceService {
             super.onCreate( holder );
 
             setWatchFaceStyle( new WatchFaceStyle.Builder( FizzyFace.this )
-                    .setCardPeekMode( WatchFaceStyle.PEEK_MODE_VARIABLE )
+                    .setCardPeekMode( WatchFaceStyle.PEEK_MODE_SHORT )
                     .setBackgroundVisibility( WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE )
                     .setShowSystemUiTime( false )
                     .build() );
 
-            bubblePaint = new Paint();
-            bubblePaint.setColor( 0xFFFFDE00 );
-            bubblePaint.setAntiAlias( !isAmbient );
 
-            backgroundPaint = new Paint();
-            backgroundPaint.setColor( 0xFF2B1330 );
+            backgroundColor = Colors.intToFloats( 0xFF2B1330 );
+            bubbleColor = Colors.intToFloats( 0xFFFFDE00 );
 
-            bubbleController = new BubbleController( backgroundPaint, bubblePaint );
+            bubbleController = new BubbleController();
 
             time = new Time();
+        }
+
+        @Override
+        public void onGlContextCreated() {
+            super.onGlContextCreated();
+
+            org.hai.gl.Env.initialize();
+
+            try {
+
+                shader = GlslProg.create( Shader.vertex, Shader.fragment );
+
+            } catch( Exception exception ) {
+
+                Log.d( TAG, "Shader compilation failed: " + exception.getMessage() );
+
+            }
+
+        }
+
+        @Override
+        public void onGlSurfaceCreated( int width, int height ) {
+            super.onGlSurfaceCreated( width, height );
+
+            screenSize = new int[] { width, height };
+
+            bubbleController.setRect( width, height );
+            bubbleController.setFont( LetterFactory.ROUND_FONT );
+
+            camera = Camera.createPixelAlignedUL( width, height );
+
+            pointMesh = new PointMesh3D();
+            pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
+            pointMesh.bufferPointSize( bubbleController.getSizes() );
+            pointMesh.getPositions().setDynamicDraw();
+            pointMesh.setShader( shader );
         }
 
         @Override
@@ -131,16 +176,20 @@ public class FizzyFace extends CanvasWatchFaceService {
                     final DataMap map = DataMapItem.fromDataItem( event.getDataItem() ).getDataMap();
 
                     if ( map.containsKey( BACKGROUND ) )
-                        backgroundPaint.setColor( map.getInt( BACKGROUND ) );
+                        backgroundColor = Colors.intToFloats( map.getInt( BACKGROUND ) );
 
                     if ( map.containsKey( FOREGROUND ) )
-                        bubblePaint.setColor( map.getInt( FOREGROUND ) );
+                        bubbleColor = Colors.intToFloats( map.getInt( FOREGROUND ) );
 
-                    if ( map.containsKey( FONT ) )
+                    if ( map.containsKey( FONT ) ) {
                         bubbleController.setFont( map.getInt( FONT ) );
+                        Log.i( "mathias", "set shape to " + map.getInt( FONT ) );
+                    }
 
-                    if ( map.containsKey( SHAPE  ) )
-                        bubbleController.setShape( map.getInt( SHAPE ) );
+                    if ( map.containsKey( SHAPE  ) ) {
+                        shape = map.getInt( SHAPE );
+                        Log.i( "mathias", "set shape to " + shape );
+                    }
                 }
             }
         }
@@ -212,7 +261,6 @@ public class FizzyFace extends CanvasWatchFaceService {
         @Override
         public void onTimeTick() {
             super.onTimeTick();
-            invalidate();
         }
 
         @Override
@@ -223,18 +271,40 @@ public class FizzyFace extends CanvasWatchFaceService {
                 isAmbient = inAmbientMode;
 
                 if ( isLowBitAmbient ) {
-                    bubblePaint.setAntiAlias( !inAmbientMode );
+//                    bubblePaint.setAntiAlias( !inAmbientMode );
                 }
 
-                invalidate();
             }
 
             updateTimer();
         }
 
         @Override
-        public void onDraw( Canvas canvas, Rect bounds ) {
+        public void onDraw() {
+            super.onDraw();
 
+            GLES20.glDisable( GLES20.GL_CULL_FACE );
+            GLES20.glDisable( GLES20.GL_DEPTH_TEST );
+
+            GLES20.glClearColor( backgroundColor[ 1 ], backgroundColor[ 2 ], backgroundColor[ 3 ], 1.0f );
+            GLES20.glClear( GLES20.GL_COLOR_BUFFER_BIT );
+            GLES20.glEnable( GLES20.GL_BLEND );
+            GLES20.glBlendFunc( GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA );
+
+            bubbleController.setNumber( getTimeString() );
+            bubbleController.update( isAmbient );
+
+            pointMesh.bufferPositions( bubbleController.getPositions3D( isRound ) );
+            pointMesh.bufferPointSize( bubbleController.getSizes() );
+            pointMesh.drawBegin();
+            pointMesh.getShader().uniform( "color", bubbleColor[ 1 ], bubbleColor[ 2 ], bubbleColor[ 3 ] );
+            pointMesh.getShader().uniform( "screenSize", screenSize[ 0 ], screenSize[ 1 ] );
+            pointMesh.getShader().uniform( "shape", shape );
+            pointMesh.draw( camera );
+            pointMesh.drawEnd();
+        }
+
+        private String getTimeString() {
             Calendar calendar = Calendar.getInstance();
 
             int hours = calendar.get( Calendar.HOUR );
@@ -242,10 +312,7 @@ public class FizzyFace extends CanvasWatchFaceService {
 
             if ( hours == 0 ) hours = 12;
 
-            String timeString = String.format( "%02d%02d", hours, minutes );
-
-            bubbleController.setNumber( timeString );
-            bubbleController.draw( canvas, bounds, isAmbient, isRound );
+            return String.format( "%02d%02d", hours, minutes );
         }
 
         /**

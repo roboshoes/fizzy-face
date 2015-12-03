@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId "com.roboshoes.fizzy"
         minSdkVersion 21
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 5
         versionName "2.1"
     }

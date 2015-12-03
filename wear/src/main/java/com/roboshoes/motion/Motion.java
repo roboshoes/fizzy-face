@@ -22,6 +22,8 @@ public class Motion {
         this.speed = speed;
         this.center = center;
 
+        curve = new Bezier();
+
         initAnchors();
         initCurve();
     }
@@ -45,7 +47,7 @@ public class Motion {
     }
 
     private void initCurve() {
-        curve = new Bezier();
+        curve.clear();
         curve.addAnchor( MathUtils.interpolate( anchors[ 0 ], anchors[ 1 ], 0.5f ) );
         curve.addAnchor( anchors[ 1 ] );
         curve.addAnchor( MathUtils.interpolate( anchors[ 1 ], anchors[ 2 ], 0.5f ) );
