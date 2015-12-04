@@ -31,6 +31,7 @@ public class Shader {
             "precision mediump float;\n" +
             "\n" +
             "uniform vec3 color;\n" +
+            "uniform vec3 lightColor;\n" +
             "uniform vec2 screenSize;\n" +
             "uniform float shape;\n" +
             "\n" +
@@ -44,6 +45,7 @@ public class Shader {
             "    vec2 pixel = vec2( gl_FragCoord.x, screenSize.y - gl_FragCoord.y );\n" +
             "    float len = distance( pixel, vertex );\n" +
             "    float alpha = 1.0;\n" +
+            "    vec3 useColor = mix( color, lightColor, pixel.y / screenSize.y );\n" +
             "\n" +
             "    if ( shape < 0.5 ) {\n" +
             "\n" +
@@ -54,11 +56,11 @@ public class Shader {
             "            alpha = 1.0 - smoothstep( radius * 0.25, radius, len );\n" +
             "            alpha *= alpha;\n" +
             "\n" +
-            "            gl_FragColor = vec4( color, alpha );\n" +
+            "            gl_FragColor = vec4( useColor, alpha );\n" +
             "\n" +
             "        } else {\n" +
             "\n" +
-            "            gl_FragColor = vec4( color, 1.0 );\n" +
+            "            gl_FragColor = vec4( useColor, 1.0 );\n" +
             "\n" +
             "        }\n" +
             "\n" +
@@ -73,7 +75,7 @@ public class Shader {
             "\n" +
             "        if ( ! any( greaterThan( distances, vec2( 0.5 ) ) ) ) discard;\n" +
             "\n" +
-            "        gl_FragColor = vec4( color, 1.0 );\n" +
+            "        gl_FragColor = vec4( useColor, 1.0 );\n" +
             "\n" +
             "    }\n" +
             "}";

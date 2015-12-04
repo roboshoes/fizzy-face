@@ -89,6 +89,7 @@ public class FizzyFace extends Gles2WatchFaceService {
 
         private float[] backgroundColor;
         private float[] bubbleColor;
+        private float[] bubbleLightColor;
         private int shape = Bubble.CIRCLE;
         private BubbleController bubbleController;
         private Time time;
@@ -105,7 +106,6 @@ public class FizzyFace extends Gles2WatchFaceService {
 
         private boolean isRegisteredTimeZoneReceiver = false;
         private boolean isAmbient;
-        private boolean isLowBitAmbient;
         private boolean isRound;
 
         @Override
@@ -119,9 +119,9 @@ public class FizzyFace extends Gles2WatchFaceService {
                     .build() );
 
 
-            backgroundColor = Colors.intToFloats( 0xFF2B1330 );
-            bubbleColor = Colors.intToFloats( 0xFFFFDE00 );
+            setBubbleColor( 0xFFFFDE00 );
 
+            backgroundColor = Colors.intToFloats( 0xFF2B1330 );
             bubbleController = new BubbleController();
 
             time = new Time();
@@ -179,7 +179,8 @@ public class FizzyFace extends Gles2WatchFaceService {
                         backgroundColor = Colors.intToFloats( map.getInt( BACKGROUND ) );
 
                     if ( map.containsKey( FOREGROUND ) )
-                        bubbleColor = Colors.intToFloats( map.getInt( FOREGROUND ) );
+                        setBubbleColor( map.getInt( FOREGROUND ) );
+
 
                     if ( map.containsKey( FONT ) ) {
                         bubbleController.setFont( map.getInt( FONT ) );
@@ -192,6 +193,13 @@ public class FizzyFace extends Gles2WatchFaceService {
                     }
                 }
             }
+        }
+
+        private void setBubbleColor( int color ) {
+            bubbleColor = Colors.intToFloats( color );
+            bubbleLightColor = Colors.intToFloats( color );
+
+            Colors.lighten( bubbleLightColor, 0.7f );
         }
 
         @Override
@@ -255,7 +263,6 @@ public class FizzyFace extends Gles2WatchFaceService {
         @Override
         public void onPropertiesChanged( Bundle properties ) {
             super.onPropertiesChanged( properties );
-            isLowBitAmbient = properties.getBoolean( PROPERTY_LOW_BIT_AMBIENT, false );
         }
 
         @Override
@@ -267,14 +274,7 @@ public class FizzyFace extends Gles2WatchFaceService {
         public void onAmbientModeChanged( boolean inAmbientMode ) {
             super.onAmbientModeChanged( inAmbientMode );
 
-            if ( isAmbient != inAmbientMode ) {
-                isAmbient = inAmbientMode;
-
-                if ( isLowBitAmbient ) {
-//                    bubblePaint.setAntiAlias( !inAmbientMode );
-                }
-
-            }
+            isAmbient = inAmbientMode;
 
             updateTimer();
         }
@@ -298,6 +298,7 @@ public class FizzyFace extends Gles2WatchFaceService {
             pointMesh.bufferPointSize( bubbleController.getSizes() );
             pointMesh.drawBegin();
             pointMesh.getShader().uniform( "color", bubbleColor[ 1 ], bubbleColor[ 2 ], bubbleColor[ 3 ] );
+            pointMesh.getShader().uniform( "lightColor", bubbleLightColor[ 1 ], bubbleLightColor[ 2 ], bubbleLightColor[ 3 ] );
             pointMesh.getShader().uniform( "screenSize", screenSize[ 0 ], screenSize[ 1 ] );
             pointMesh.getShader().uniform( "shape", shape );
             pointMesh.draw( camera );
