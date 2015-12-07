@@ -41,7 +41,7 @@ public class Shader {
             "\n" +
             "void main() {\n" +
             "\n" +
-            "    vec2 pixel = glFragCoord.xy;\n" +
+            "    vec2 pixel = gl_FragCoord.xy;\n" +
             "    float len = distance( pixel, vertex );\n" +
             "    float alpha = 1.0;\n" +
             "\n" +

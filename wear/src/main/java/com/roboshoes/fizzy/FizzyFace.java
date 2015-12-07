@@ -152,7 +152,7 @@ public class FizzyFace extends Gles2WatchFaceService {
             screenSize = new int[] { width, height };
 
             bubbleController.setRect( width, height );
-            bubbleController.setFont( LetterFactory.ROUND_FONT );
+            bubbleController.setFont( LetterFactory.BLOCK_FONT );
 
             camera = Camera.createPixelAlignedUL( width, height );
 
