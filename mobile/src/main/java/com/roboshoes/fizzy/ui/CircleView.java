@@ -2,6 +2,7 @@ package com.roboshoes.fizzy.ui;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Rational;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 

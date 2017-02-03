@@ -6,15 +6,16 @@ android {
         config {}
     }
 
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.roboshoes.fizzy"
-        minSdkVersion 21
-        targetSdkVersion 22
-        versionCode 7
-        versionName "3.1"
+        minSdkVersion 23
+        targetSdkVersion 25
+        versionCode 8
+        versionName "4.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
