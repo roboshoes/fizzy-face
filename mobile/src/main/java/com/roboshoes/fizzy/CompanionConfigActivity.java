@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -13,6 +14,7 @@ import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.roboshoes.fizzy.ui.CircleView;
+import com.roboshoes.fizzy.ui.ClockGLView;
 
 public class CompanionConfigActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -54,6 +56,12 @@ public class CompanionConfigActivity extends Activity implements
 
         initShapeButton( (Button) findViewById( R.id.circle_shape_button ), CIRCLE );
         initShapeButton( (Button) findViewById( R.id.plus_shape_button ), PLUS );
+
+        ClockGLView clock = new ClockGLView( this );
+
+        ViewGroup holder = (ViewGroup) findViewById( R.id.gl_holder );
+
+        holder.addView( clock );
     }
 
     private void fillContainer( LinearLayout container, String target ) {

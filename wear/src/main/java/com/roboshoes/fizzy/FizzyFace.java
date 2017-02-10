@@ -41,9 +41,11 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
-import com.roboshoes.fizzy.font.LetterFactory;
-import com.roboshoes.fizzy.gl.Shader;
-import com.roboshoes.utils.Colors;
+import com.roboshoes.shared.font.LetterFactory;
+import com.roboshoes.shared.Bubble;
+import com.roboshoes.shared.BubbleController;
+import com.roboshoes.shared.gl.ShaderAssets;
+import com.roboshoes.shared.utils.Colors;
 
 import org.hai.gl.GlslProg;
 import org.hai.grfx.Camera;
@@ -52,6 +54,7 @@ import org.hai.grfx.es2.PointMesh3D;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -86,7 +89,6 @@ public class FizzyFace extends Gles2WatchFaceService {
         private static final String FONT = "com.roboshoes.font.type";
         private static final String SHAPE = "com.roboshoes.shape.type";
 
-
         private float[] backgroundColor;
         private float[] bubbleColor;
         private int shape = Bubble.CIRCLE;
@@ -105,7 +107,6 @@ public class FizzyFace extends Gles2WatchFaceService {
 
         private boolean isRegisteredTimeZoneReceiver = false;
         private boolean isAmbient;
-        private boolean isLowBitAmbient;
         private boolean isRound;
 
         @Override
@@ -134,15 +135,10 @@ public class FizzyFace extends Gles2WatchFaceService {
             org.hai.gl.Env.initialize();
 
             try {
-
-                shader = GlslProg.create( Shader.vertex, Shader.fragment );
-
+                shader = GlslProg.create( ShaderAssets.vertex, ShaderAssets.fragment );
             } catch( Exception exception ) {
-
-                Log.d( TAG, "Shader compilation failed: " + exception.getMessage() );
-
+                Log.d( TAG, exception.getMessage() );
             }
-
         }
 
         @Override
@@ -181,15 +177,11 @@ public class FizzyFace extends Gles2WatchFaceService {
                     if ( map.containsKey( FOREGROUND ) )
                         bubbleColor = Colors.intToFloats( map.getInt( FOREGROUND ) );
 
-                    if ( map.containsKey( FONT ) ) {
+                    if ( map.containsKey( FONT ) )
                         bubbleController.setFont( map.getInt( FONT ) );
-                        Log.i( "mathias", "set shape to " + map.getInt( FONT ) );
-                    }
 
-                    if ( map.containsKey( SHAPE  ) ) {
+                    if ( map.containsKey( SHAPE  ) )
                         shape = map.getInt( SHAPE );
-                        Log.i( "mathias", "set shape to " + shape );
-                    }
                 }
             }
         }
@@ -253,12 +245,6 @@ public class FizzyFace extends Gles2WatchFaceService {
         }
 
         @Override
-        public void onPropertiesChanged( Bundle properties ) {
-            super.onPropertiesChanged( properties );
-            isLowBitAmbient = properties.getBoolean( PROPERTY_LOW_BIT_AMBIENT, false );
-        }
-
-        @Override
         public void onTimeTick() {
             super.onTimeTick();
         }
@@ -267,14 +253,7 @@ public class FizzyFace extends Gles2WatchFaceService {
         public void onAmbientModeChanged( boolean inAmbientMode ) {
             super.onAmbientModeChanged( inAmbientMode );
 
-            if ( isAmbient != inAmbientMode ) {
-                isAmbient = inAmbientMode;
-
-                if ( isLowBitAmbient ) {
-//                    bubblePaint.setAntiAlias( !inAmbientMode );
-                }
-
-            }
+            isAmbient = inAmbientMode;
 
             updateTimer();
         }
@@ -312,7 +291,7 @@ public class FizzyFace extends Gles2WatchFaceService {
 
             if ( hours == 0 ) hours = 12;
 
-            return String.format( "%02d%02d", hours, minutes );
+            return String.format( Locale.US, "%02d%02d", hours, minutes );
         }
 
         /**
